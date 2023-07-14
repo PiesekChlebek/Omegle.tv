@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Simple Chat</title>
+  <style>
+    #chatlog {
+      height: 300px;
+      overflow-y: scroll;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    #input {
+      margin-top: 10px;
+    }
+  </style>
+  <script>
+    function sendMessage() {
+      var messageInput = document.getElementById('message');
+      var message = messageInput.value;
+
+      if (message.trim() !== '') {
+        var chatLog = document.getElementById('chatlog');
+        chatLog.innerHTML += '<p><strong>You:</strong> ' + message + '</p>';
+
+        // Code to send the message to the server or other user goes here
+
+        messageInput.value = '';
+      }
+    }
+
+    function handleKeyPress(event) {
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        sendMessage();
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <h1>Simple Chat</h1>
+
+  <div id="chatlog"></div>
+
+  <input type="text" id="message" placeholder="Type your message" onkeypress="handleKeyPress(event)">
+  <button onclick="sendMessage()">Send</button>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+
+  function sendMessage() {
+    var messageInput = document.getElementById('message');
+    var message = messageInput.value;
+
+    if (message.trim() !== '') {
+      socket.emit('chat message', message);
+      messageInput.value = '';
+    }
+  }
+
+  socket.on('chat message', (message) => {
+    var chatLog = document.getElementById('chatlog');
+    chatLog.innerHTML += '<p><strong>Stranger:</strong> ' + message + '</p>';
+  });
+
+  function handleKeyPress(event) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      sendMessage();
+    }
+  }
+</script>
+
+</html>
