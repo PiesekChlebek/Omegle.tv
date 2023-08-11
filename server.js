@@ -9,6 +9,12 @@ const io = socketIO(server);
 // Serve static files from the "public" directory
 app.use(express.static('public'));
 
+app.get('/favicon.ico', (req, res) => {
+  // Send a 204 No Content status to prevent the 404 error
+  res.status(204).end();
+});
+
+
 // Socket.IO connection handler
 io.on('connection', (socket) => {
   console.log('A user connected');
