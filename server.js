@@ -5,6 +5,13 @@ const socketIO = require('socket.io');
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
+const path = require('path');
+
+// Serve the Socket.IO script
+app.get('/socket.io/socket.io.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'node_modules/socket.io/client-dist/socket.io.js'));
+});
+
 
 // Serve static files from the "public" directory
 app.use(express.static('public'));
